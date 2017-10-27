@@ -1,0 +1,33 @@
+
+~~ Instructions for setting up directories for XF scripts ~~
+
+
+1. You should initially have four files:
+    controller.sh
+    Evolved_Dipole_CMD.cpp
+    dipole_PEC.xmacro
+    output.xmacro
+
+2. Place all four files into a directory (I called mine XFScripts)
+    mkdir XFScripts
+    mv controller.sh XFScripts/
+    ...
+
+3. Inside XFScripts, create a directory called Evolved_Dipole:
+    cd XFScripts
+    mkdir Evolved_Dipole
+
+4. Move Evolved_Dipole_CMD.cpp into Evolved_Dipole and compile the .cpp file:
+    mv Evolved_Dipole_CMD.cpp Evolved_Dipole/
+    cd Evolved_Dipole
+    g++ Evolved_Dipole_CMD.cpp -o Evolved_Dipole
+
+5. Run the Evolved_Dipole executable :
+    ./Evolved_Dipole --start
+   This should output a file called "handshake.csv"
+
+6. Create directories called "data" and "watches"
+    mkdir data
+    mkdir watches
+
+7. In watches, create a file called "watch.txt" that contains 0
