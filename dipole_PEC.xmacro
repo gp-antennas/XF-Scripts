@@ -1,7 +1,7 @@
 //Macro to build a dipole antenna made of PEC in XF
 //J. Potter -- 06/17
 
-var path = "C:/Users/Hannah/Documents/Research/XF/XFScripts/Evolved_Dipole/handshake.csv";  //replace path to handshake.csv from your Windows C: drive
+var path = "C:/Users/Hannah/Documents/Research/XF/XF_Scripts/Evolved_Dipole/handshake.csv";  //replace path to handshake.csv from your Windows C: drive
 var file = new File(path);
 file.open(1);
 var hands = file.readAll();
@@ -29,12 +29,12 @@ for(var i = 0;i < lines.length;i++){
 file.close();
 
 // set variables for length of the dipoles, radius of the dipoles and units for the lengths
-var dipoleLength = 10;
+var dipoleLength = 20;
 var dipoleRadius = 5;
 var connectorLength=1.0;
 var gridSize = .25;
 var units = " cm" //don't delete the space
-var frequency = .5;
+var frequency = .3;
 
 //App.saveCurrentProjectAs("C:/Users/Jordan/Desktop/Emacs_Scripts/XFScripts/XFDipoleTest1.xf");
 
