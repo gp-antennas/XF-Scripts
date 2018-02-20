@@ -28,7 +28,7 @@ const int NLINES = ((360/PHI_INCR)+1)*((180/THETA_INCR)+1) + HEADERLINES; // tot
 const int NPHIS = (360/PHI_INCR)+1;
 const int THETA = 90;                          // theta coordinate we want to extract theta gain for
 const double TARGETGAIN = 5.14;                // ideal gain value
-
+const double EPSILON = 0.000001;                // if the first individual's fitness score is less than epsilon, run the program again.
 
 // DEFINE FUNCTIONS
 
@@ -105,8 +105,8 @@ double Fitness(int i, double (&thetaGain)[NPOP][NPHIS]){
   double score=0;
   for(int j=0; j<NPHIS; j++){
     score += thetaGain[i][j];
-    score = score/NPHIS;
   }
+  score=score/NPHIS;
   return score;
 }
 
@@ -122,35 +122,45 @@ int main(int argc, char** argv){
   //thetaGain = new double[NPOP][NPHIS];
   double thetaGain[NPOP][NPHIS];
   double *fitnessScores = NULL;
+
+
   
   if(argc != NPOP+1) cout << endl << "Error! Please specify all XF output data files. Please preserve the order of the generation's individuals." << endl << endl;
   else {
 
-    for(int f=1; f<=NPOP; f++){
-
-      uanLines = new string[NLINES];     // new array of strings - each index will contain a line of data file
-
-      Read(argv[f], infile, uanLines);
-
-      // pass uanLines for extraction of theta gain values
-
-      ExtractThetaGain(uanLines, f, thetaGain);
-      
-      delete [] uanLines;
-      uanLines = NULL;    
-    }
-
-    // pass theta gain values to the fitness function
-    // store fitness scores in array
-    
     double score;
     fitnessScores = new double[NPOP];
+
+    while(fitnessScores[0]<EPSILON){
+      
+      for(int f=1; f<=NPOP; f++){
+
+	uanLines = new string[NLINES];     // new array of strings - each index will contain a line of data file
+
+	Read(argv[f], infile, uanLines);
+
+	// pass uanLines for extraction of theta gain values
+
+	ExtractThetaGain(uanLines, f, thetaGain);
+      
+	delete [] uanLines;
+	uanLines = NULL;    
+      }
+
+      // pass theta gain values to the fitness function
+      // store fitness scores in array
     
-    for(int indiv=0; indiv<NPOP; indiv++){
-      score = Fitness(indiv, thetaGain);
-      fitnessScores[indiv] = score;
+      //double score;
+      //fitnessScores = new double[NPOP];                         // moved upstairs for error-checking with while loop
+    
+      for(int indiv=0; indiv<NPOP; indiv++){
+	score = Fitness(indiv, thetaGain);
+	//cout << score << endl;
+	fitnessScores[indiv] = score;
+      }
     }
 
+    
     // Write handshook.csv
     ofstream handshook;
     handshook.open("handshook.csv");
@@ -162,6 +172,9 @@ int main(int argc, char** argv){
     handshook.close();
     delete [] fitnessScores;
     fitnessScores = NULL;
-  }   
+  }
+
+
+  
   return 0;
 }
